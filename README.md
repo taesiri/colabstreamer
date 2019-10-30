@@ -11,10 +11,10 @@
 A colab notebook with GPU is needed.
 
 ```bash
-!pip install git+https://github.com/taesiri/colabstraemer
-import colabstraemer
-colabstraemer.config_all()
-colabstraemer.stream_to_twitch('twitch_secret')
+!pip install git+https://github.com/taesiri/colabstreamer
+import colabstreamer
+colabstreamer.config_all()
+colabstreamer.stream_to_twitch('twitch_secret')
 ```
 
 ## remocolab
@@ -23,4 +23,4 @@ This module is heavily influenced by [remocolab](https://github.com/demotomohiro
 
 ## Screenshot
 
-![glxgears](https://raw.githubusercontent.com/taesiri/colabstraemer/master/Screenshots/glxgears.png)
+![glxgears](https://raw.githubusercontent.com/taesiri/colabstreamer/master/Screenshots/glxgears.png)
