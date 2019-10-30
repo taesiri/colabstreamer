@@ -1,9 +1,9 @@
 from setuptools import setup
 
 setup(
-    name = "colabstraemer.py",
+    name = "colabstreamer.py",
     version = "0.1",
-    py_modules = ['colabstraemer'],
-    url = "https://github.com/taesiri/colabstraemer",
+    py_modules = ['colabstreamer'],
+    url = "https://github.com/taesiri/colabstreamer",
     author = "taesiri",
 )
