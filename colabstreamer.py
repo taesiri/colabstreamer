@@ -75,8 +75,7 @@ def config_all():
   _config_xorg()
   _config_i3()
 
-
-def _twitch_stream(stream_secret):
+def _generic_stream(stream_url, stream_secret):
   _xorg = subprocess.Popen(["Xorg", "-seat", "seat-1", "-allowMouseOpenFail", "-novtswitch", "-nolisten", "tcp"])
   _i3 = subprocess.Popen("i3", env=envc, shell=True)
   _ffmpeg = subprocess.Popen(["ffmpeg", "-threads:v", "2", "-threads:a", "8", "-filter_threads", "2", "-thread_queue_size", 
@@ -84,10 +83,33 @@ def _twitch_stream(stream_secret):
                               "-minrate:v", "2400k", "-maxrate:v", "2400k", "-bufsize:v", "2400k", "-c:v", "h264_nvenc", 
                               "-qp:v", "19", "-profile:v", "high", "-rc:v", "cbr_ld_hq", "-r:v", "60", "-g:v", "120", 
                               "-bf:v", "3", "-refs:v", "16", "-f", "flv", 
-                              "rtmp://live.twitch.tv/app/" + stream_secret])
-  
-
+                              stream_url + stream_secret])
   return (_xorg, _i3, _ffmpeg)
 
-def stream_to_twitch(stream_secret):
-  return _twitch_stream(stream_secret)
+def stream_to_twitch(stream_secret, rtmp_server = "rtmp://live.twitch.tv/app/"):
+  return _generic_stream(rtmp_server, stream_secret)
+
+def stream_to_youtube(stream_secret, rtmp_server = "rtmp://a.rtmp.youtube.com/live2/"):
+  return _generic_stream(rtmp_server, stream_secret)
+
+def load_i3_layout(json_url):
+  from i3ipc import Connection, Event
+
+  _download(json_url, "/tmp/layout.json")
+  i3 = Connection()
+  i3.command("workspace 1; append_layout /tmp/layout.json")
+
+def print_i3_windows():
+  from i3ipc import Connection, Event
+
+  for con in i3.get_tree():
+    if con.window and con.parent.type != 'dockarea':
+      print("id = {} class = {} name = {} workspace = {}".format(con.window, con.window_class, con.name, con.workspace().name))
+
+def kill_all_i3_windows():
+  from i3ipc import Connection, Event
+  
+  root = i3.get_tree()
+  print(root.name)
+  for con in root:
+      con.command('kill')
