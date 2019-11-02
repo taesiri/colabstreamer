@@ -28,10 +28,7 @@ def _download(url, path):
     print("Failed to download ", url)
     raise
 
-def _install_everything():
-  all_packages = ["xvfb", "xserver-xorg", "mesa-utils", "xinit", "xdotool",
-                "linux-generic", "xterm", "htop", "i3", "xloadimage"]
-
+def _combo_installer(all_packages):
   cache = apt.Cache()
   cache.update()
   cache.open(None)
@@ -41,6 +38,12 @@ def _install_everything():
   _installPkgs(cache, all_packages)
 
   cache.commit()
+
+def _install_everything():
+  packages_to_install = ["xvfb", "xserver-xorg", "mesa-utils", "xinit", "xdotool",
+                "linux-generic", "xterm", "htop", "i3", "xloadimage", "libgtk2.0-0", "libgconf-2-4"]
+
+  _combo_installer(packages_to_install)
 
 def _config_xorg():
   _download("http://us.download.nvidia.com/tesla/418.67/NVIDIA-Linux-x86_64-418.67.run", "nvidia.run")
@@ -64,6 +67,10 @@ def _config_xorg():
   with open("/etc/X11/xorg.conf", "w") as f:
     f.write(conf)
 
+def config_no_gpu():
+  packages_to_install = ["xvfb", "xserver-xorg", "linux-generic", "xterm", "htop", "libgtk2.0-0", "libgconf-2-4"]
+
+  _combo_installer(packages_to_install)
 
 def _config_i3():
   _download("https://gist.githubusercontent.com/taesiri/ea3f5c6154ebd31e0c2092606a236a22/raw/6f2314ea55704c6c940aa1a4f8eb89a9a5453577/config", "i3.conf")
